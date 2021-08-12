@@ -5,15 +5,15 @@ max_boxcar_width_in_sec 0.5
 periodicity_sigma_cutoff 20
 periodicity_harmonics 32
 -analysis
--acceleration
+acceleration
 -acceleration_jerk
 -z_max 200
 -z_step 2
 -w_max 800
 -w_step 20
--output_ffdot_plan
--output_fdas_list
-periodicity
+output_ffdot_plan
+output_fdas_list
+-periodicity
 -output_dmt
 -dered
 -zero_dm
@@ -24,7 +24,7 @@ threshold
 baselinenoise
 -fdas_custom_fft
 -fdas_inbin
--fdas_norm
+fdas_norm
 debug
 -analysis_debug
 -failsafe
