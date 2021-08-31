@@ -18,6 +18,8 @@ if __name__ == "__main__":
 
 	b2s_hist = np.asarray(analysis_funcs.extract_diff_hist_perc_diff_b2s(grouped_results, harmonic, index))
 
+	#print(b2s_hist.tolist())
+
 	nbins = 50
 
 	#xmax
@@ -34,11 +36,13 @@ if __name__ == "__main__":
 
 	xbinnames = []
 	for i in range(nbins-1):
-		xbinnames.append(str(int(xbins[i])) + " to " + str(int(xbins[i+1])))
+		#xbinnames.append(str(int(xbins[i])) + " to " + str(int(xbins[i+1])))
+		xbinnames.append("-> " + str(int(xbins[i+1])))
 
 	print(xbins)
 
 	box_whisker = []
+	histogram = []
 
 	for i in range(nbins-1):
 		perc_diffs_at_snr = []
@@ -46,18 +50,30 @@ if __name__ == "__main__":
 			if curr_snr[1] > xbins[i] and curr_snr[1] < xbins[i+1]:
 				perc_diffs_at_snr.append(curr_snr[0])
 		box_whisker.append(perc_diffs_at_snr)
+		histogram.append(len(perc_diffs_at_snr))
 		print("xbins["+str(i)+"]: " + str(xbins[i]) + ", xbins["+str(i+1)+"]: " + str(xbins[i+1]))
 
-	flierprops = dict(marker='x', markerfacecolor='black', markersize=4, markeredgecolor='black')
-	fig1, ax1 = plt.subplots()
-	ax1.set_title('Percentage difference between single and bfloat16 precision recovered SNR peak height')
-	ax1.boxplot(box_whisker, showmeans=True, meanline=True, flierprops=flierprops)
-	xtickNames = plt.setp(ax1, xticklabels=xbinnames)
-	plt.setp(xtickNames, rotation=90, fontsize=8)
-	plt.xlabel("SNR bin")
-	plt.ylabel("Percentage difference")
-	plt.text(5,2,'Yellow line = median, green line = mean')
 
+	print(histogram)
+	flierprops = dict(marker='x', markerfacecolor='black', markersize=4, markeredgecolor='black')
+	fig, axs = plt.subplots(2,1)
+	#plt.subplot(2,1,1)
+	axs[0].set_title('Percentage difference between single and bfloat16 precision recovered SNR peak height')
+	axs[0].boxplot(box_whisker, showmeans=True, meanline=True, flierprops=flierprops)
+	xtickNames = plt.setp(axs[0], xticklabels=xbinnames)
+	plt.setp(xtickNames, rotation=90, fontsize=8)
+	axs[0].set_xlabel("SNR bin")
+	axs[0].set_ylabel("Percentage difference")
+	axs[0].text(5,2,'Yellow line = median, green line = mean')
+
+	print(xbins[1]-xbins[0])
+	axs[1].set_title('Number of peaks in each bin')
+	print(len(xbins))
+	print(len(histogram))
+	axs[1].bar(xbins[0:-1], histogram, xbins[1]-xbins[0])
+	axs[1].set_xlim(left = -90, right = 8700)
+
+	fig.subplots_adjust(wspace=1.0)
 	plt.show()
 
 	#xmin = min(b2s_hist + s2d_hist + b2d_hist)

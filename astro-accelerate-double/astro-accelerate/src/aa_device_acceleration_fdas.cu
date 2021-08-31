@@ -415,13 +415,8 @@ namespace astroaccelerate {
 
     		e = cudaMemcpy(gpuarrays_float.d_in_signal, output_buffer[i][dm_count], processed*sizeof(float), cudaMemcpyHostToDevice);
 
-    		call_kernel_cast_float_to_double(gpuarrays.d_in_signal, gpuarrays_float.d_in_signal, processed*sizeof(float) );
+    		//call_kernel_cast_float_to_double(gpuarrays.d_in_signal, gpuarrays_float.d_in_signal, processed*sizeof(float) );
     		//print_1D_double_array(gpuarrays.d_in_signal, processed*sizeof(float));
-	    
-	    
-		
-
-	    
 
 	    if(e != cudaSuccess) {
 	    	LOG(log_level::error, "Could not cudaMemcpy in aa_device_acceleration.cu (" + std::string(cudaGetErrorString(e)) + ")");
@@ -439,6 +434,17 @@ namespace astroaccelerate {
 	    cudaProfilerStart(); //exclude cuda initialization ops
 	    if(cmdargs.basic) {
 	      gettimeofday(&t_start, NULL); //don't time transfer
+
+			#ifndef FDAS_CONV_TEST
+				if (CUFFT_SUCCESS != cufftExecR2C(fftplans.realplan, gpuarrays_float.d_in_signal, gpuarrays_float.d_fft_signal)){
+					printf("Could not cufftXtExec\n");
+				}
+				cudaDeviceSynchronize();
+				call_kernel_cast_float2_to_double2(gpuarrays.d_fft_signal, gpuarrays_float.d_fft_signal, (1+(params.nsamps/2))*sizeof(float2));
+				printf("gpuarrays.d_fft_signal straight after single transform:\n");
+				print_1D_double2_array(gpuarrays.d_fft_signal, 2048);
+		  #endif
+
 	      fdas_cuda_basic(&fftplans, &gpuarrays, &cmdargs, &params );
 	      /*
 	       * Same question about fftplans here

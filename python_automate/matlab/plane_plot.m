@@ -1,11 +1,11 @@
-data_table = readtable('/home/jack/hdd/dat/period_22.9_width_50.0_snrpeak_5_dm_50_nbits_8_nchans_1024_tsamp_128_tobs_600_fch1_1550_foff_0.292968752_09-08-2021-23-34-29.998354_double_plane.dat');
+data_table = readtable('/home/jack/hdd/dat/period_6834.71204_width_12.91678_snrpeak_0.09032_dm_251_nbits_8_nchans_1024_tsamp_128_tobs_600_fch1_1550_foff_0.292968752_binary_nan_bper_187.46437_bphase_0.2_bpmass_1.15891_bcmass_0.81846_25-08-2021-19-01-09.743319_double_plane.dat');
 data_xyz = table2array(data_table);
 data_table = [];
 data_xyz = [data_xyz(:,1) data_xyz(:,4) data_xyz(:,5)];
 data_xyz = single(data_xyz);
 cropped_data_xyz = [];
 for i = 0:1:192
-    cropped_data_xyz = [cropped_data_xyz; data_xyz(1+i*2097151:1+i*2097151 + 200000,:)];
+    cropped_data_xyz = [cropped_data_xyz; data_xyz(1+i*2097151:1+i*2097151 + 20000,:)];
     disp(i);
 end
 data_xyz = [];

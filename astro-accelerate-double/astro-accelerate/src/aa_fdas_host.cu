@@ -605,7 +605,7 @@ void print_1D_double2_array(double2* d_double2_array, size_t data_length_bytes){
       LOG(log_level::error, "Could not cufftCreate in aa_fdas_host.cu ");
     }
 
-    if(CUFFT_SUCCESS != cufftMakePlanMany(fftplans->realplan, nrank, rn, rinembed, istride, ridist, ronembed, ostride, rodist, CUFFT_D2Z, 1, &rworksize)) {
+    if(CUFFT_SUCCESS != cufftMakePlanMany( fftplans->realplan, nrank, rn, rinembed, istride, ridist, ronembed, ostride, rodist, CUFFT_R2C, 1, &rworksize)) {
       LOG(log_level::error, "Could not cufftMakePlanMany in aa_fdas_host.cu 1");
     }
     
@@ -648,9 +648,9 @@ void print_1D_double2_array(double2* d_double2_array, size_t data_length_bytes){
     */
     //real fft
 #ifndef FDAS_CONV_TEST
-    if (CUFFT_SUCCESS != cufftExecD2Z(fftplans->realplan, gpuarrays->d_in_signal, gpuarrays->d_fft_signal CUFFT_FORWARD)){
-      printf("Could not cufftExecD2Z\n");
-    }
+    //if (CUFFT_SUCCESS != cufftExecD2Z(fftplans->realplan, gpuarrays->d_in_signal, gpuarrays->d_fft_signal CUFFT_FORWARD)){
+    //  printf("Could not cufftExecD2Z\n");
+    //}
 #endif
 
 #ifdef FDAS_CONV_TEST
