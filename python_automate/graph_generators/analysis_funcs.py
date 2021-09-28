@@ -8,7 +8,7 @@ def relative_difference (a,b):
 	except:
 		return 0
 
-def group_results(resultsFilePath, nPeaks, dateSince):
+def group_results(resultsFilePath, nPeaks, dateSince = datetime.datetime(2001,1,1), dateBefore = datetime.datetime(2030,1,1)):
 	rawResultsList = []
 	with open(resultsFilePath, "r") as resultsFile:
 		for line in resultsFile:
@@ -37,13 +37,14 @@ def group_results(resultsFilePath, nPeaks, dateSince):
 		}
 		aaOutputDatFileName = i["aaOutputDatFileName"]
 		date = i["date"]
-
-		if datetime.datetime.strptime(date, "%d-%m-%Y-%H-%M-%S.%f") > dateSince:
+		checkDate = datetime.datetime.strptime(date, "%d-%m-%Y-%H-%M-%S.%f")
+		if (checkDate > dateSince) and (checkDate < dateBefore):
 			results.append({"peak_list": peak_list, "precision":precision, "parameters":parameters, "date":date, "aaOutputDatFileName":aaOutputDatFileName})
 
 	grouped_results = []
 	for result in results:
 		result_group = {}
+		#print(result)
 		if result["precision"] == "bfloat":
 			result_group["bfloat_peaks"] = json.loads(result["peak_list"])[0:nPeaks]
 			result_group["parameters"] = result["parameters"]
@@ -55,9 +56,15 @@ def group_results(resultsFilePath, nPeaks, dateSince):
 						result_group["single_peaks"] = json.loads(candidate["peak_list"])[0:nPeaks]
 					if candidate["precision"] == "double":
 						result_group["double_peaks"] = json.loads(candidate["peak_list"])[0:nPeaks]
+					if candidate["precision"] == "PRESTOsummed":
+						result_group["PRESTOsummed_peaks"] = json.loads(candidate["peak_list"])[0:nPeaks]
+					if candidate["precision"] == "PRESTOcoherent":
+						result_group["PRESTOcoherent_peaks"] = json.loads(candidate["peak_list"])[0:nPeaks]
+					if candidate["precision"] == "PRESTOsigma":
+						result_group["PRESTOsigma_peaks"] = json.loads(candidate["peak_list"])[0:nPeaks]
 			results.remove(result)
 			grouped_results.append(result_group)
-	#print("Returning grouped_results: " + str(grouped_results))
+	print("Returning grouped_results: " + str(grouped_results))
 	return grouped_results
 
 def extract_diff_hist_save_params(grouped_results, harmonic, index):
@@ -114,6 +121,37 @@ def extract_diff_hist(grouped_results, harmonic, index):
 			s2d_hist.append(s2d_diff)
 			b2d_hist.append(b2d_diff)
 		except:
+			#pass
+			print("nothing to add to histogram, dump group:")
+			print(group)
+			print("\n\n\n")
+
+	return b2s_hist, s2d_hist, b2d_hist
+
+def extract_diff_hist_freq_bin(grouped_results, harmonic, index):
+
+	b2s_hist = []
+	s2d_hist = []
+	b2d_hist = []
+
+	for group in grouped_results:
+		try:
+			bfloat_peak = group["bfloat_peaks"][harmonic][index]
+			single_peak = group["single_peaks"][harmonic][index]
+			double_peak = group["double_peaks"][harmonic][index]
+
+
+			b2s_diff = bfloat_peak-single_peak
+			s2d_diff = single_peak-double_peak
+			b2d_diff = bfloat_peak-double_peak
+
+			#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
+
+			b2s_hist.append(b2s_diff)
+			s2d_hist.append(s2d_diff)
+			b2d_hist.append(b2d_diff)
+		except:
+			#pass
 			print("nothing to add to histogram, dump group:")
 			print(group)
 			print("\n\n\n")
@@ -186,8 +224,8 @@ def roundup(number, nearest):
 	else:
 		return nearest
 
-def params_from_filename(filename):
-	print("extracing params from " + filename)
+def params_from_filename(filename, extract_date=True):
+	#print("extracing params from " + filename)
 	params = {}
 	params_list = filename.split('_')
 	i = 0
@@ -195,13 +233,16 @@ def params_from_filename(filename):
 		try:
 			params[params_list[i]] = float(params_list[i+1])
 		except:
-			print("Reached end of string")
-		try:
-			date = datetime.datetime.strptime(params_list[i], '%d-%m-%Y-%H-%M-%S.%f')
-			params["date"] = params_list[i]
-		except:
-			#print("params_list: " + str(params_list) + " params_list[i]:" +params_list[i] + " is not datetime")
 			pass
+			#print("Reached end of string")
+		if extract_date:
+			try:
+				date = datetime.datetime.strptime(params_list[i], '%d-%m-%Y-%H-%M-%S.%f')
+				params["date"] = params_list[i]
+				print(date)
+			except:
+				#print("params_list: " + str(params_list) + " params_list[i]:" +params_list[i] + " is not datetime")
+				pass
 	for element in params_list:
 		if element == "bfloat":
 			params["precision"] = "bfloat"
@@ -209,7 +250,10 @@ def params_from_filename(filename):
 			params["precision"] = "single"
 		if element == "double":
 			params["precision"] = "double"
-	print("Returning params: " + str(params))
+		if element == "PRESTO":
+			params["precision"] = "PRESTO"
+		#print(element)
+	#print("Returning params: " + str(params))
 	return params
 
 #add the bfloat, single, double peak if all parameters EXCEPT target are default values

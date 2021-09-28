@@ -7,16 +7,17 @@ import numpy as np
 if __name__ == "__main__":
 	grouped_results = analysis_funcs.group_results("uniformresults.txt", 5)
 
+	i = 0
 	for group in grouped_results:
-		print(group)
+		print(i)
 		print("\n")
 	
-	graph_colour_0 = 'g'
+	graph_colour_0 = 'r'
 	graph_colour_1 = 'g'
-	graph_colour_2 = 'g'
+	graph_colour_2 = 'b'
 	harmonic = 0 	# 0 = fundamental, 1 = 1st harmonic, 2 = 2nd harmonic etc.
 
-	index = 1		# 0 = accn, 1 = freq, 2 = snr
+	index = 2		# 0 = accn, 1 = freq, 2 = snr
 
 	b2s_hist_0, s2d_hist_0, b2d_hist_0 = analysis_funcs.extract_diff_hist(grouped_results, 0, index)
 	b2s_hist_1, s2d_hist_1, b2d_hist_1 = analysis_funcs.extract_diff_hist(grouped_results, 1, index)
@@ -111,6 +112,7 @@ if __name__ == "__main__":
 	xlo_i = s2d_2_mean - 3*s2d_2_stdev
 	xhi_i = s2d_2_mean + 3*s2d_2_stdev
 
+
 	ylo_a = 0
 	ylo_b = 0
 	ylo_c = 0
@@ -169,12 +171,12 @@ if __name__ == "__main__":
 
 	plt.subplot(3,2,1)
 	plt.hist(b2s_hist_0, binEdges_a, density=False, facecolor=graph_colour_0, alpha=0.75)
-	plt.ylabel('SNR - Fundamental peak')
+	plt.ylabel('Number of peaks - Fundamental')
 	plt.title('BFLOAT vs SINGLE')
 	plt.xlim(xlo_a, xhi_a)
 	plt.ylim(ylo_a, yhi_a)
 	measured_str = str(len(b2s_hist_0)) + ' peaks measured'
-	plotted_str = "\n" + str(sum(b2s_values_0[0])) + ' peaks plotted, ±3σ'
+	plotted_str = "\n" + str(sum(b2s_values_0[0])) + ' peaks plotted, μ±3σ'
 	mean_str = "\nMean: " + "{:e}".format(round(b2s_0_mean,4))
 	stdev_str = "\nStdev: " + str(round(b2s_0_stdev,4))
 	max_str = "\nMax:" + str(round(max(b2s_hist_0),4))
@@ -202,7 +204,7 @@ if __name__ == "__main__":
 	plt.xlim(xlo_c, xhi_c)
 	plt.ylim(ylo_c, yhi_c)
 	measured_str = str(len(s2d_hist_0)) + ' peaks measured'
-	plotted_str = "\n" + str(sum(s2d_values_0[0])) + ' peaks plotted, ±3σ'
+	plotted_str = "\n" + str(sum(s2d_values_0[0])) + ' peaks plotted, μ±3σ'
 	mean_str = "\nMean: " + "{:e}".format(round(s2d_0_mean,4))
 	stdev_str = "\nStdev: " + str(round(s2d_0_stdev,4))
 	max_str = "\nMax:" + str(round(max(s2d_hist_0),4))
@@ -213,12 +215,12 @@ if __name__ == "__main__":
 
 	plt.subplot(3,2,3)
 	plt.hist(b2s_hist_1, binEdges_d, density=False, facecolor=graph_colour_1, alpha=0.75)
-	plt.ylabel('SNR - First harmonic')
+	plt.ylabel('Number of peaks - First harmonic')
 	#plt.title('BFLOAT vs SINGLE')
 	plt.xlim(xlo_d, xhi_d)
 	plt.ylim(ylo_d, yhi_d)
 	measured_str = str(len(b2s_hist_1)) + ' peaks measured'
-	plotted_str = "\n" + str(sum(b2s_values_1[0])) + ' peaks plotted, ±3σ'
+	plotted_str = "\n" + str(sum(b2s_values_1[0])) + ' peaks plotted, μ±3σ'
 	mean_str = "\nMean: " + "{:e}".format(round(b2s_1_mean,4))
 	stdev_str = "\nStdev: " + str(round(b2s_1_stdev,4))
 	max_str = "\nMax:" + str(round(max(b2s_hist_1),4))
@@ -246,7 +248,7 @@ if __name__ == "__main__":
 	plt.xlim(xlo_f, xhi_f)
 	plt.ylim(ylo_f, yhi_f)
 	measured_str = str(len(s2d_hist_1)) + ' peaks measured'
-	plotted_str = "\n" + str(sum(s2d_values_1[0])) + ' peaks plotted, ±3σ'
+	plotted_str = "\n" + str(sum(s2d_values_1[0])) + ' peaks plotted, μ±3σ'
 	mean_str = "\nMean: " + "{:e}".format(round(s2d_1_mean,4))
 	stdev_str = "\nStdev: " + str(round(s2d_1_stdev,4))
 	max_str = "\nMax:" + str(round(max(s2d_hist_1),4))
@@ -257,13 +259,13 @@ if __name__ == "__main__":
 
 	plt.subplot(3,2,5)
 	plt.hist(b2s_hist_2, binEdges_g, density=False, facecolor=graph_colour_2, alpha=0.75)
-	plt.xlabel('% Difference')
-	plt.ylabel('SNR - Second harmonic')
+	plt.xlabel('Relative difference between peak SNR - %')
+	plt.ylabel('Number of peaks - Second harmonic')
 	#plt.title('BFLOAT vs SINGLE')
 	plt.xlim(xlo_g, xhi_g)
 	plt.ylim(ylo_g, yhi_g)
 	measured_str = str(len(b2s_hist_2)) + ' peaks measured'
-	plotted_str = "\n" + str(sum(b2s_values_2[0])) + ' peaks plotted, ±3σ'
+	plotted_str = "\n" + str(sum(b2s_values_2[0])) + ' peaks plotted, μ±3σ'
 	mean_str = "\nMean: " + "{:e}".format(round(b2s_2_mean,4))
 	stdev_str = "\nStdev: " + str(round(b2s_2_stdev,4))
 	max_str = "\nMax:" + str(round(max(b2s_hist_2),4))
@@ -288,12 +290,12 @@ if __name__ == "__main__":
 #
 	plt.subplot(3,2,6)
 	plt.hist(s2d_hist_2, binEdges_i, density=False, facecolor=graph_colour_2, alpha=0.75)
-	plt.xlabel('% Difference')
+	plt.xlabel('Relative difference between peak SNR - %')
 	#plt.title('SINGLE vs DOUBLE')
 	plt.xlim(xlo_i, xhi_i)
 	plt.ylim(ylo_i, yhi_i)
 	measured_str = str(len(s2d_hist_2)) + ' peaks measured'
-	plotted_str = "\n" + str(sum(s2d_values_2[0])) + ' peaks plotted, ±3σ'
+	plotted_str = "\n" + str(sum(s2d_values_2[0])) + ' peaks plotted, μ±3σ'
 	mean_str = "\nMean: " + "{:e}".format(round(s2d_2_mean,4))
 	stdev_str = "\nStdev: " + str(round(s2d_2_stdev,4))
 	max_str = "\nMax:" + str(round(max(s2d_hist_2),4))
@@ -303,7 +305,7 @@ if __name__ == "__main__":
 	plt.grid(True)
 
 
-	plt.suptitle("Relative percent difference between peak SNR across uniformly random synthetic pulsars")
+	plt.suptitle("Relative difference between peak SNR in synthetic pulsars (log sampled input parameters)")
 	plt.show()
 
 

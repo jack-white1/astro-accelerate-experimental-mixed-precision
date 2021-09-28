@@ -111,6 +111,7 @@ if __name__ == "__main__":
 	xlo_i = s2d_2_mean - 3*s2d_2_stdev
 	xhi_i = s2d_2_mean + 3*s2d_2_stdev
 
+
 	ylo_a = 0
 	ylo_b = 0
 	ylo_c = 0
@@ -167,7 +168,7 @@ if __name__ == "__main__":
 
 	xtickrotation = 15
 
-	plt.subplot(3,2,1)
+	plt.subplot(3,3,1)
 	plt.hist(b2s_hist_0, binEdges_a, density=False, facecolor=graph_colour_0, alpha=0.75)
 	plt.ylabel('SNR - Fundamental peak')
 	plt.title('BFLOAT vs SINGLE')
@@ -182,21 +183,21 @@ if __name__ == "__main__":
 	plt.text(xlo_a + 0.025*abs(xhi_a-xlo_a),yhi_a*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.grid(True)
 
-#	plt.subplot(3,3,2)
-#	plt.hist(b2d_hist_0, binEdges_b, density=False, facecolor=graph_colour_0, alpha=0.75)
-#	plt.title('BFLOAT vs DOUBLE')
-#	plt.xlim(xlo_b, xhi_b)
-#	plt.ylim(ylo_b, yhi_b)
-#	measured_str = str(len(b2d_hist_0)) + ' peaks measured'
-#	plotted_str = "\n" + str(sum(b2d_values_0[0])) + ' peaks plotted, ±3σ'
-#	mean_str = "\nMean: " + "{:e}".format(round(b2d_0_mean,4))
-#	stdev_str = "\nStdev: " + str(round(b2d_0_stdev,4))
-#	max_str = "\nMax:" + str(round(max(b2d_hist_0),4))
-#	min_str = "\nMin:" + str(round(min(b2d_hist_0),4))
-#	plt.text(xlo_b + 0.025*abs(xhi_b-xlo_b),yhi_b*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
-#	plt.grid(True)
-#
-	plt.subplot(3,2,2)
+	plt.subplot(3,3,2)
+	plt.hist(b2d_hist_0, binEdges_b, density=False, facecolor=graph_colour_0, alpha=0.75)
+	plt.title('BFLOAT vs DOUBLE')
+	plt.xlim(xlo_b, xhi_b)
+	plt.ylim(ylo_b, yhi_b)
+	measured_str = str(len(b2d_hist_0)) + ' peaks measured'
+	plotted_str = "\n" + str(sum(b2d_values_0[0])) + ' peaks plotted, ±3σ'
+	mean_str = "\nMean: " + "{:e}".format(round(b2d_0_mean,4))
+	stdev_str = "\nStdev: " + str(round(b2d_0_stdev,4))
+	max_str = "\nMax:" + str(round(max(b2d_hist_0),4))
+	min_str = "\nMin:" + str(round(min(b2d_hist_0),4))
+	plt.text(xlo_b + 0.025*abs(xhi_b-xlo_b),yhi_b*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	plt.grid(True)
+
+	plt.subplot(3,3,3)
 	plt.hist(s2d_hist_0, binEdges_c, density=False, facecolor=graph_colour_0, alpha=0.75)
 	plt.title('SINGLE vs DOUBLE')
 	plt.xlim(xlo_c, xhi_c)
@@ -211,7 +212,7 @@ if __name__ == "__main__":
 	plt.xticks(rotation=xtickrotation, ha="right")
 	plt.grid(True)
 
-	plt.subplot(3,2,3)
+	plt.subplot(3,3,4)
 	plt.hist(b2s_hist_1, binEdges_d, density=False, facecolor=graph_colour_1, alpha=0.75)
 	plt.ylabel('SNR - First harmonic')
 	#plt.title('BFLOAT vs SINGLE')
@@ -226,21 +227,21 @@ if __name__ == "__main__":
 	plt.text(xlo_d + 0.025*abs(xhi_d-xlo_d),yhi_d*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.grid(True)
 
-#	plt.subplot(3,3,5)
-#	plt.hist(b2d_hist_1, binEdges_e, density=False, facecolor=graph_colour_1, alpha=0.75)
-#	#plt.title('BFLOAT vs DOUBLE')
-#	plt.xlim(xlo_e, xhi_e)
-#	plt.ylim(ylo_e, yhi_e)
-#	measured_str = str(len(b2d_hist_1)) + ' peaks measured'
-#	plotted_str = "\n" + str(sum(b2d_values_1[0])) + ' peaks plotted, ±3σ'
-#	mean_str = "\nMean: " + "{:e}".format(round(b2d_1_mean,4))
-#	stdev_str = "\nStdev: " + str(round(b2d_1_stdev,4))
-#	max_str = "\nMax:" + str(round(max(b2d_hist_1),4))
-#	min_str = "\nMin:" + str(round(min(b2d_hist_1),4))
-#	plt.text(xlo_e + 0.025*abs(xhi_e-xlo_e),yhi_e*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
-#	plt.grid(True)
+	plt.subplot(3,3,5)
+	plt.hist(b2d_hist_1, binEdges_e, density=False, facecolor=graph_colour_1, alpha=0.75)
+	#plt.title('BFLOAT vs DOUBLE')
+	plt.xlim(xlo_e, xhi_e)
+	plt.ylim(ylo_e, yhi_e)
+	measured_str = str(len(b2d_hist_1)) + ' peaks measured'
+	plotted_str = "\n" + str(sum(b2d_values_1[0])) + ' peaks plotted, ±3σ'
+	mean_str = "\nMean: " + "{:e}".format(round(b2d_1_mean,4))
+	stdev_str = "\nStdev: " + str(round(b2d_1_stdev,4))
+	max_str = "\nMax:" + str(round(max(b2d_hist_1),4))
+	min_str = "\nMin:" + str(round(min(b2d_hist_1),4))
+	plt.text(xlo_e + 0.025*abs(xhi_e-xlo_e),yhi_e*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	plt.grid(True)
 
-	plt.subplot(3,2,4)
+	plt.subplot(3,3,6)
 	plt.hist(s2d_hist_1, binEdges_f, density=False, facecolor=graph_colour_1, alpha=0.75)
 	#plt.title('SINGLE vs DOUBLE')
 	plt.xlim(xlo_f, xhi_f)
@@ -255,7 +256,7 @@ if __name__ == "__main__":
 	plt.xticks(rotation=xtickrotation, ha="right")
 	plt.grid(True)
 
-	plt.subplot(3,2,5)
+	plt.subplot(3,3,7)
 	plt.hist(b2s_hist_2, binEdges_g, density=False, facecolor=graph_colour_2, alpha=0.75)
 	plt.xlabel('% Difference')
 	plt.ylabel('SNR - Second harmonic')
@@ -271,22 +272,22 @@ if __name__ == "__main__":
 	plt.text(xlo_g + 0.025*abs(xhi_g-xlo_g),yhi_g*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.grid(True)
 
-#	plt.subplot(3,3,8)
-#	plt.hist(b2d_hist_2, binEdges_h, density=False, facecolor=graph_colour_2, alpha=0.75)
-#	plt.xlabel('% Difference')
-#	#plt.title('BFLOAT vs DOUBLE')
-#	plt.xlim(xlo_h, xhi_h)
-#	plt.ylim(ylo_h, yhi_h)
-#	measured_str = str(len(b2d_hist_2)) + ' peaks measured'
-#	plotted_str = "\n" + str(sum(b2d_values_1[0])) + ' peaks plotted, ±3σ'
-#	mean_str = "\nMean: " + "{:e}".format(round(b2d_1_mean,4))
-#	stdev_str = "\nStdev: " + str(round(b2d_1_stdev,4))
-#	max_str = "\nMax:" + str(round(max(b2d_hist_1),4))
-#	min_str = "\nMin:" + str(round(min(b2d_hist_1),4))
-#	plt.text(xlo_h + 0.025*abs(xhi_h-xlo_h),yhi_h*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
-#	plt.grid(True)
-#
-	plt.subplot(3,2,6)
+	plt.subplot(3,3,8)
+	plt.hist(b2d_hist_2, binEdges_h, density=False, facecolor=graph_colour_2, alpha=0.75)
+	plt.xlabel('% Difference')
+	#plt.title('BFLOAT vs DOUBLE')
+	plt.xlim(xlo_h, xhi_h)
+	plt.ylim(ylo_h, yhi_h)
+	measured_str = str(len(b2d_hist_2)) + ' peaks measured'
+	plotted_str = "\n" + str(sum(b2d_values_1[0])) + ' peaks plotted, ±3σ'
+	mean_str = "\nMean: " + "{:e}".format(round(b2d_1_mean,4))
+	stdev_str = "\nStdev: " + str(round(b2d_1_stdev,4))
+	max_str = "\nMax:" + str(round(max(b2d_hist_1),4))
+	min_str = "\nMin:" + str(round(min(b2d_hist_1),4))
+	plt.text(xlo_h + 0.025*abs(xhi_h-xlo_h),yhi_h*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	plt.grid(True)
+
+	plt.subplot(3,3,9)
 	plt.hist(s2d_hist_2, binEdges_i, density=False, facecolor=graph_colour_2, alpha=0.75)
 	plt.xlabel('% Difference')
 	#plt.title('SINGLE vs DOUBLE')

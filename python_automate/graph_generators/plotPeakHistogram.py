@@ -6,7 +6,7 @@ import numpy as np
 
 if __name__ == "__main__":
 	nPeaks = 5
-	grouped_results = analysis_funcs.group_results("results.txt", nPeaks)
+	grouped_results = analysis_funcs.group_results("uniformresults.txt", nPeaks)
 
 	bfloat_hist_data = []
 	single_hist_data = []
@@ -52,13 +52,13 @@ if __name__ == "__main__":
 	#xhigh = 10000
 	ylow = 0
 
-	binEdges = np.linspace(xlow,xhigh,100).tolist()
+	binEdges = np.linspace(xlow,xhigh,1000).tolist()
 	bfloat_values = np.histogram(bfloat_hist_data, binEdges)
 	single_values = np.histogram(single_hist_data, binEdges)
 	double_values = np.histogram(double_hist_data, binEdges)
 
 	yhigh = max(bfloat_values[0].tolist() + single_values[0].tolist() + double_values[0].tolist()) + 5
-
+	xhigh = 2500
 
 	plt.subplot(1,3,1)
 	plt.hist(bfloat_hist_data, binEdges, density=False, facecolor='g', alpha=0.75)

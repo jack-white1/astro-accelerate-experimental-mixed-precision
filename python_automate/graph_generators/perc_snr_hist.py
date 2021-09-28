@@ -6,7 +6,7 @@ import numpy as np
 import datetime
 
 if __name__ == "__main__":
-	grouped_results = analysis_funcs.group_results("results.txt", 10, datetime.datetime(2021,8,20))
+	grouped_results = analysis_funcs.group_results("uniformresults.txt", 10)
 
 	#for group in grouped_results:
 	#	print(group)
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
 	#print(b2s_hist.tolist())
 
-	nbins = 50
+	nbins = 20
 
 	#xmax
 	xmax = max(b2s_hist[:,1].tolist())
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 	xbinnames = []
 	for i in range(nbins-1):
 		#xbinnames.append(str(int(xbins[i])) + " to " + str(int(xbins[i+1])))
-		xbinnames.append("-> " + str(int(xbins[i+1])))
+		xbinnames.append("[" + str(int(xbins[i])) + ", " + str(int(xbins[i+1])) + "]")
 
 	print(xbins)
 
@@ -73,7 +73,8 @@ if __name__ == "__main__":
 	axs[1].bar(xbins[0:-1], histogram, xbins[1]-xbins[0])
 	axs[1].set_xlim(left = -90, right = 8700)
 
-	fig.subplots_adjust(wspace=1.0)
+	#fig.subplots_adjust(wspace=5.0)
+	fig.tight_layout(pad=0.5)
 	plt.show()
 
 	#xmin = min(b2s_hist + s2d_hist + b2d_hist)
