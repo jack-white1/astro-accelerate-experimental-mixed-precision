@@ -1,4 +1,4 @@
-range	201	301	0.1  1 1
+range	128	228	0.1  1 1
 sigma_cutoff	6
 sigma_constant  3.0
 max_boxcar_width_in_sec 0.5
@@ -11,7 +11,7 @@ acceleration
 -z_step 2
 -w_max 800
 -w_step 20
-output_ffdot_plan
+-output_ffdot_plan
 output_fdas_list
 -periodicity
 -output_dmt
@@ -29,4 +29,4 @@ debug
 -analysis_debug
 -failsafe
 file 
-/home/jack/hdd/fil/period_6834.71204_width_12.91678_snrpeak_0.09032_dm_251_nbits_8_nchans_1024_tsamp_128_tobs_600_fch1_1550_foff_0.292968752_binary_nan_bper_187.46437_bphase_0.2_bpmass_1.15891_bcmass_0.81846_25-08-2021-19-01-09.743319_.fil
+/home/jack/hdd/fil/seed_1439478108_period_19.60724_width_47.72891_snrpeak_0.08183_dm_178_nbits_8_nchans_1024_tsamp_128_tobs_600_fch1_1550_foff_0.292968752_binary_nan_bper_3.54604_bphase_0.2_bpmass_1.04484_bcmass_1.56046_28-09-2021-01-08-44.540886_.fil

@@ -11,7 +11,7 @@ acceleration
 -z_step 2
 -w_max 800
 -w_step 20
-output_ffdot_plan
+-output_ffdot_plan
 output_fdas_list
 -periodicity
 -output_dmt
