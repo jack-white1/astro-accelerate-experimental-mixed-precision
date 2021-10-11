@@ -261,9 +261,9 @@ def makeFilFile(parameters):
 	now = datetime.now() # current date a
 	filFileName += now.strftime("%d-%m-%Y-%H-%M-%S.%f_")
 	aaOutputDatFileName = "./dat/"+filFileName
-	filFileName ='/home/jack/hdd/fil/' +filFileName+ '.fil'
+	filFileName ='/home/jack/data/fil/' +filFileName+ '.fil'
 	fakeArguments +=(' > ' + filFileName)
-	fakeExecutable = '/home/jack/Documents/mk_sigproc/executables/bin/fake ' + fakeArguments
+	fakeExecutable = '/home/jack/sigproc/executables/bin/fake ' + fakeArguments
 	#print(fakeExecutable)
 	os.system(fakeExecutable)
 	filepath_parameters = {'filepath':filFileName, 'parameters':parameters}
@@ -275,17 +275,17 @@ def makeFilFile(parameters):
 
 def makeDatFile(filepath, parameters, precision):
 
-	standardInputFilePath = '/home/jack/Documents/aa_mixed/astro-accelerate-experimental-mixed-precision/python_automate/input_files/standard_input.txt'
-	tempInputFilePath = '/home/jack/Documents/aa_mixed/astro-accelerate-experimental-mixed-precision/python_automate/input_files/temp_input.txt'
+	standardInputFilePath = '/home/jack/astro-accelerate-experimental-mixed-precision/python_automate/input_files/standard_input.txt'
+	tempInputFilePath = '/home/jack/astro-accelerate-experimental-mixed-precision/python_automate/input_files/temp_input.txt'
 
-	aaPath = {'bfloat':'/home/jack/Documents/aa_mixed/astro-accelerate-experimental-mixed-precision/astro-accelerate-partial-bfloat/astro-accelerate/astro-accelerate',\
-			'single':'/home/jack/Documents/aa_mixed/astro-accelerate-experimental-mixed-precision/astro-accelerate-single/astro-accelerate/astro-accelerate',
-			'double':'/home/jack/Documents/aa_mixed/astro-accelerate-experimental-mixed-precision/astro-accelerate-double/astro-accelerate/astro-accelerate'}
+	aaPath = {'bfloat':'/home/jack/astro-accelerate-experimental-mixed-precision/astro-accelerate-partial-bfloat/astro-accelerate/astro-accelerate',\
+			'single':'/home/jack/astro-accelerate-experimental-mixed-precision/astro-accelerate-single/astro-accelerate/astro-accelerate',
+			'double':'/home/jack/astro-accelerate-experimental-mixed-precision/astro-accelerate-double/astro-accelerate/astro-accelerate'}
 
 	aaOutputDatFileName = ''
 	for key in parameters:
 		aaOutputDatFileName += key + '_' + str(parameters[key]) + '_'
-	aaOutputDatFileName = "/home/jack/hdd/dat/" + aaOutputDatFileName + filepath[-31:-5] + '_' + precision + '_'
+	aaOutputDatFileName = "/home/jack/data/dat/" + aaOutputDatFileName + filepath[-31:-5] + '_' + precision + '_'
 
 	aaTargetDM = str(parameters['dm'])
 
@@ -369,14 +369,14 @@ if __name__ == "__main__":
 #	makeFakeToDoList(fakeParameters)
 
 
-	randomSamples = 200
+	randomSamples = 32
 	fakeParameters = []
 	for i in range(randomSamples):
 		fakeParameters.append(makeLogUniformFakeParameters())
 	print(fakeParameters)
 	makeRandomFakeToDoList(fakeParameters)
 #
-	numthreads = 12
+	numthreads = 32
 
 	while is_non_zero_file("fakeToDoList.txt"):
 		numlines = returnNumLines("fakeToDoList.txt")
