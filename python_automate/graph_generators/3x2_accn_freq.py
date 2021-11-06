@@ -8,11 +8,12 @@ if __name__ == "__main__":
 	grouped_results = analysis_funcs.group_results("uniformresults.txt", 5)
 
 	i = 0
-	for group in grouped_results:
-		if group["bfloat_peaks"][1][0] != group["single_peaks"][1][0]: #[harmonic][acc = 0 ,freq = 1,snr = 2, freq_bin = 3]
-			print(group["bfloat_peaks"])
-			print(group["single_peaks"])
-			print("\n")
+	#for group in grouped_results:
+	#	print(group)
+	#	if group["bfloat_peaks"][1][0] != group["single_peaks"][1][0]: #[harmonic][acc = 0 ,freq = 1,snr = 2, freq_bin = 3]
+	#		print(group["bfloat_peaks"])
+	#		print(group["single_peaks"])
+	#		print("\n")
 	
 	graph_colour_0 = 'r'
 	graph_colour_1 = 'g'
@@ -23,19 +24,45 @@ if __name__ == "__main__":
 
 	index = 0		# 0 = accn, 1 = freq, 2 = snr
 
-	accn_b2s_hist_0, accn_s2d_hist_0, accn_b2d_hist_0 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 0, index)
-	accn_b2s_hist_1, accn_s2d_hist_1, accn_b2d_hist_1 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 1, index)
-	accn_b2s_hist_2, accn_s2d_hist_2, accn_b2d_hist_2 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 2, index)
+	accn_s2d_hist_0, accn_b2s_hist_0, accn_b2d_hist_0 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 0, index)
+	accn_s2d_hist_1, accn_b2s_hist_1, accn_b2d_hist_1 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 1, index)
+	accn_s2d_hist_2, accn_b2s_hist_2, accn_b2d_hist_2 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 2, index)
+
+	#print("accn_b2s_hist_0:")
+	#print(accn_b2s_hist_0)
 
 
 	index = 1		# 0 = accn, 1 = freq, 2 = snr
 
-	freq_b2s_hist_0, freq_s2d_hist_0, freq_b2d_hist_0 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 0, index)
-	freq_b2s_hist_1, freq_s2d_hist_1, freq_b2d_hist_1 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 1, index)
-	freq_b2s_hist_2, freq_s2d_hist_2, freq_b2d_hist_2 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 2, index)
+	freq_s2d_hist_0, freq_b2s_hist_0, freq_b2d_hist_0 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 0, index)
+	freq_s2d_hist_1, freq_b2s_hist_1, freq_b2d_hist_1 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 1, index)
+	freq_s2d_hist_2, freq_b2s_hist_2, freq_b2d_hist_2 = analysis_funcs.extract_diff_hist_freq_bin(grouped_results, 2, index)
 
+	print("freq_b2s_hist_0")
+	print(freq_b2s_hist_0)
 
-	print(accn_b2s_hist_0)
+	accn_b2s_hist_0_len = len(accn_b2s_hist_0)
+	accn_b2s_hist_1_len = len(accn_b2s_hist_1)
+	accn_b2s_hist_2_len = len(accn_b2s_hist_2)
+	freq_b2s_hist_0_len = len(freq_b2s_hist_0)
+	freq_b2s_hist_1_len = len(freq_b2s_hist_1)
+	freq_b2s_hist_2_len = len(freq_b2s_hist_2)
+
+	accn_b2s_hist_0 = list(filter(lambda a: a != 0.0, accn_b2s_hist_0))
+	accn_b2s_hist_1 = list(filter(lambda a: a != 0.0, accn_b2s_hist_1))
+	accn_b2s_hist_2 = list(filter(lambda a: a != 0.0, accn_b2s_hist_2))
+
+	freq_b2s_hist_0 = list(filter(lambda a: a != 0.0, freq_b2s_hist_0))
+	freq_b2s_hist_1 = list(filter(lambda a: a != 0.0, freq_b2s_hist_1))
+	freq_b2s_hist_2 = list(filter(lambda a: a != 0.0, freq_b2s_hist_2))
+
+	accn_b2s_hist_0_len -= len(accn_b2s_hist_0)
+	accn_b2s_hist_1_len -= len(accn_b2s_hist_1)
+	accn_b2s_hist_2_len -= len(accn_b2s_hist_2)
+	freq_b2s_hist_0_len -= len(freq_b2s_hist_0)
+	freq_b2s_hist_1_len -= len(freq_b2s_hist_1)
+	freq_b2s_hist_2_len -= len(freq_b2s_hist_2)
+
 
 	accn_b2s_0_mean = np.mean(accn_b2s_hist_0)
 	accn_b2s_0_stdev = np.std(accn_b2s_hist_0)
@@ -60,17 +87,17 @@ if __name__ == "__main__":
 	xmin_a = min(accn_b2s_hist_0)
 	xmax_a = max(accn_b2s_hist_0)
 
-	xmax_b = max(accn_b2s_hist_1)
-	xmin_b = min(accn_b2s_hist_1)
+	xmax_b = max(freq_b2s_hist_0)
+	xmin_b = min(freq_b2s_hist_0)
 
-	xmin_c = min(accn_b2s_hist_2)
-	xmax_c = max(accn_b2s_hist_2)
+	xmin_c = min(accn_b2s_hist_1)
+	xmax_c = max(accn_b2s_hist_1)
 
-	xmin_d = min(freq_b2s_hist_0)
-	xmax_d = max(freq_b2s_hist_0)
+	xmin_d = min(freq_b2s_hist_1)
+	xmax_d = max(freq_b2s_hist_1)
 
-	xmax_e = max(freq_b2s_hist_1)
-	xmin_e = min(freq_b2s_hist_1)
+	xmax_e = max(accn_b2s_hist_2)
+	xmin_e = min(accn_b2s_hist_2)
 
 	xmin_f = min(freq_b2s_hist_2)
 	xmax_f = max(freq_b2s_hist_2)
@@ -99,21 +126,6 @@ if __name__ == "__main__":
 	xlo_f = xmin_f
 	xhi_f = xmax_f
 
-	xlo_a = accn_b2s_0_mean - 3*accn_b2s_0_stdev
-	xhi_a = accn_b2s_0_mean + 3*accn_b2s_0_stdev
-	xlo_b = accn_b2s_1_mean - 3*accn_b2s_1_stdev
-	xhi_b = accn_b2s_1_mean + 3*accn_b2s_1_stdev
-	xlo_c = accn_b2s_2_mean - 3*accn_b2s_2_stdev
-	xhi_c = accn_b2s_2_mean + 3*accn_b2s_2_stdev
-
-	xlo_d = freq_b2s_0_mean - 3*freq_b2s_0_stdev
-	xhi_d = freq_b2s_0_mean + 3*freq_b2s_0_stdev
-	xlo_e = freq_b2s_1_mean - 3*freq_b2s_1_stdev
-	xhi_e = freq_b2s_1_mean + 3*freq_b2s_1_stdev
-	xlo_f = freq_b2s_2_mean - 3*freq_b2s_2_stdev
-	xhi_f = freq_b2s_2_mean + 3*freq_b2s_2_stdev
-
-
 	ylo_a = 0
 	ylo_b = 0
 	ylo_c = 0
@@ -124,40 +136,56 @@ if __name__ == "__main__":
 	ylo_h = 0
 	ylo_i = 0
 
+
 	nbins = 100
 
 	binEdges_a = np.linspace(xlo_a,xhi_a,nbins).tolist()
 	accn_b2s_values_0 = np.histogram(accn_b2s_hist_0, binEdges_a)
 
 	binEdges_b = np.linspace(xlo_b,xhi_b,nbins).tolist()
-	accn_b2s_values_1 = np.histogram(accn_b2s_hist_1, binEdges_b)
+	freq_b2s_values_0 = np.histogram(freq_b2s_hist_0, binEdges_b)
 
 	binEdges_c = np.linspace(xlo_c,xhi_c,nbins).tolist()
-	accn_b2s_values_2 = np.histogram(accn_b2s_hist_2, binEdges_c)
-
+	accn_b2s_values_1 = np.histogram(accn_b2s_hist_1, binEdges_c)
 
 	binEdges_d = np.linspace(xlo_d,xhi_d,nbins).tolist()
-	freq_b2s_values_0 = np.histogram(freq_b2s_hist_0, binEdges_a)
+	freq_b2s_values_1 = np.histogram(freq_b2s_hist_1, binEdges_d)
 
 	binEdges_e = np.linspace(xlo_e,xhi_e,nbins).tolist()
-	freq_b2s_values_1 = np.histogram(freq_b2s_hist_1, binEdges_b)
+	accn_b2s_values_2 = np.histogram(accn_b2s_hist_2, binEdges_e)
 
 	binEdges_f = np.linspace(xlo_f,xhi_f,nbins).tolist()
-	freq_b2s_values_2 = np.histogram(freq_b2s_hist_2, binEdges_c)
+	freq_b2s_values_2 = np.histogram(freq_b2s_hist_2, binEdges_f)
+
+	xlo_a = accn_b2s_0_mean - 3*accn_b2s_0_stdev
+	xhi_a = accn_b2s_0_mean + 3*accn_b2s_0_stdev
+	xlo_b = freq_b2s_0_mean - 3*freq_b2s_0_stdev
+	xhi_b = freq_b2s_0_mean + 3*freq_b2s_0_stdev
+	xlo_c = accn_b2s_1_mean - 3*accn_b2s_1_stdev
+	xhi_c = accn_b2s_1_mean + 3*accn_b2s_1_stdev
+
+	xlo_d = freq_b2s_1_mean - 3*freq_b2s_1_stdev
+	xhi_d = freq_b2s_1_mean + 3*freq_b2s_1_stdev
+	xlo_e = accn_b2s_2_mean - 3*accn_b2s_2_stdev
+	xhi_e = accn_b2s_2_mean + 3*accn_b2s_2_stdev
+	xlo_f = freq_b2s_2_mean - 3*freq_b2s_2_stdev
+	xhi_f = freq_b2s_2_mean + 3*freq_b2s_2_stdev
 
 
-
+	print("accn_b2s_values_2[0]: ")
+	print(accn_b2s_values_2[0])
+	print("\n")
 	yhi_a = max(accn_b2s_values_0[0].tolist())*1.1
-	yhi_b = max(accn_b2s_values_1[0].tolist())*1.1
-	yhi_c = max(accn_b2s_values_2[0].tolist())*1.1
+	yhi_b = max(freq_b2s_values_0[0].tolist())*1.1
+	yhi_c = max(accn_b2s_values_1[0].tolist())*1.1
 
-	yhi_d = max(freq_b2s_values_0[0].tolist())*1.1
-	yhi_e = max(freq_b2s_values_1[0].tolist())*1.1
+	yhi_d = max(freq_b2s_values_1[0].tolist())*1.1
+	yhi_e = max(accn_b2s_values_2[0].tolist())*1.1
 	yhi_f = max(freq_b2s_values_2[0].tolist())*1.1
 
 
-	#print(str(xlo_d) + " " + str(xhi_d) +  " " + str(ylo_d) +  " " + str(yhi_d))
-	#print(b2s_values_0)
+	print("yhi_a = " +str(yhi_a) + ",  yhi_b =" + str(yhi_b) +  ", yhi_c = " + str(yhi_c) +  ", yhi_d = " + str(yhi_d) +  ", yhi_e = " + str(yhi_e) +  ", yhi_f = " + str(yhi_f))
+	print(accn_b2s_hist_0)
 
 	fig, axs = plt.subplots(3, 2, sharey=True, tight_layout=False)
 
@@ -175,7 +203,8 @@ if __name__ == "__main__":
 	stdev_str = "\nStdev: " + str(round(accn_b2s_0_stdev,4))
 	max_str = "\nMax:" + str(round(max(accn_b2s_hist_0),4))
 	min_str = "\nMin:" + str(round(min(accn_b2s_hist_0),4))
-	plt.text(xlo_a + 0.025*abs(xhi_a-xlo_a),yhi_a*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	not_plotted_str = "\n" + str(accn_b2s_hist_0_len) + ' PEAKS IGNORED AT BIN DRIFT = 0.0'
+	plt.text(xlo_a + 0.025*abs(xhi_a-xlo_a),yhi_a*0.5, measured_str + plotted_str + not_plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.grid(True)
 
 	plt.subplot(3,2,2)
@@ -189,7 +218,8 @@ if __name__ == "__main__":
 	stdev_str = "\nStdev: " + str(round(freq_b2s_0_stdev,4))
 	max_str = "\nMax:" + str(round(max(freq_b2s_hist_0),4))
 	min_str = "\nMin:" + str(round(min(freq_b2s_hist_0),4))
-	plt.text(xlo_b + 0.025*abs(xhi_b-xlo_b),yhi_c*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	not_plotted_str = "\n" + str(freq_b2s_hist_0_len) + ' PEAKS IGNORED AT BIN DRIFT = 0.0'
+	plt.text(xlo_b + 0.025*abs(xhi_b-xlo_b),yhi_b*0.5, measured_str + plotted_str + not_plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.xticks(rotation=xtickrotation, ha="right")
 	plt.grid(True)
 
@@ -205,7 +235,8 @@ if __name__ == "__main__":
 	stdev_str = "\nStdev: " + str(round(accn_b2s_1_stdev,4))
 	max_str = "\nMax:" + str(round(max(accn_b2s_hist_1),4))
 	min_str = "\nMin:" + str(round(min(accn_b2s_hist_1),4))
-	plt.text(xlo_c + 0.025*abs(xhi_c-xlo_c),yhi_c*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	not_plotted_str = "\n" + str(accn_b2s_hist_1_len) + ' PEAKS IGNORED AT BIN DRIFT = 0.0'
+	plt.text(xlo_c + 0.025*abs(xhi_c-xlo_c),yhi_c*0.5, measured_str + plotted_str + not_plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.grid(True)
 
 	plt.subplot(3,2,4)
@@ -218,7 +249,8 @@ if __name__ == "__main__":
 	stdev_str = "\nStdev: " + str(round(freq_b2s_1_stdev,4))
 	max_str = "\nMax:" + str(round(max(freq_b2s_hist_1),4))
 	min_str = "\nMin:" + str(round(min(freq_b2s_hist_1),4))
-	plt.text(xlo_d + 0.025*abs(xhi_d-xlo_d),yhi_d*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	not_plotted_str = "\n" + str(freq_b2s_hist_1_len) + ' PEAKS IGNORED AT BIN DRIFT = 0.0'
+	plt.text(xlo_d + 0.025*abs(xhi_d-xlo_d),yhi_d*0.5, measured_str + plotted_str + not_plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.xticks(rotation=xtickrotation, ha="right")
 	plt.grid(True)
 
@@ -234,7 +266,8 @@ if __name__ == "__main__":
 	stdev_str = "\nStdev: " + str(round(accn_b2s_2_stdev,4))
 	max_str = "\nMax:" + str(round(max(accn_b2s_hist_2),4))
 	min_str = "\nMin:" + str(round(min(accn_b2s_hist_2),4))
-	plt.text(xlo_e + 0.025*abs(xhi_e-xlo_e),yhi_e*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	not_plotted_str = "\n" + str(accn_b2s_hist_2_len) + ' PEAKS IGNORED AT BIN DRIFT = 0.0'
+	plt.text(xlo_e + 0.025*abs(xhi_e-xlo_e),yhi_e*0.5, measured_str + plotted_str + not_plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.grid(True)
 
 	plt.subplot(3,2,6)
@@ -248,12 +281,13 @@ if __name__ == "__main__":
 	stdev_str = "\nStdev: " + str(round(freq_b2s_2_stdev,4))
 	max_str = "\nMax:" + str(round(max(freq_b2s_hist_2),4))
 	min_str = "\nMin:" + str(round(min(freq_b2s_hist_2),4))
-	plt.text(xlo_f + 0.025*abs(xhi_f-xlo_f),yhi_f*0.55, measured_str + plotted_str + mean_str + stdev_str + max_str + min_str)
+	not_plotted_str = "\n" + str(freq_b2s_hist_2_len) + ' PEAKS IGNORED AT BIN DRIFT = 0.0'
+	plt.text(xlo_f + 0.025*abs(xhi_f-xlo_f),yhi_f*0.5, measured_str + plotted_str + not_plotted_str + mean_str + stdev_str + max_str + min_str)
 	plt.xticks(rotation=xtickrotation, ha="right")
 	plt.grid(True)
 
 
-	plt.suptitle("Acceleration, frequency bin drift in synthetic pulsars (log sampled input parameters)")
+	plt.suptitle("Acceleration, frequency bin drift in synthetic pulsars (SINGLE vs DOUBLE)")
 	plt.show()
 
 

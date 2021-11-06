@@ -123,7 +123,7 @@ if __name__ == "__main__":
 	ylo_h = 0
 	ylo_i = 0
 
-	nbins = 100
+	nbins = 250
 
 	binEdges_a = np.linspace(xlo_a,xhi_a,nbins).tolist()
 	b2s_values_0 = np.histogram(b2s_hist_0, binEdges_a)
@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
 	plt.subplot(3,2,1)
 	plt.hist(b2s_hist_0, binEdges_a, density=False, facecolor=graph_colour_0, alpha=0.75)
-	plt.ylabel('Number of peaks - Fundamental')
+	plt.ylabel('Fundamental\nNumber of occurences')
 	plt.title('BFLOAT vs SINGLE')
 	plt.xlim(xlo_a, xhi_a)
 	plt.ylim(ylo_a, yhi_a)
@@ -215,7 +215,7 @@ if __name__ == "__main__":
 
 	plt.subplot(3,2,3)
 	plt.hist(b2s_hist_1, binEdges_d, density=False, facecolor=graph_colour_1, alpha=0.75)
-	plt.ylabel('Number of peaks - First harmonic')
+	plt.ylabel('First harmonic\nNumber of occurences')
 	#plt.title('BFLOAT vs SINGLE')
 	plt.xlim(xlo_d, xhi_d)
 	plt.ylim(ylo_d, yhi_d)
@@ -260,7 +260,7 @@ if __name__ == "__main__":
 	plt.subplot(3,2,5)
 	plt.hist(b2s_hist_2, binEdges_g, density=False, facecolor=graph_colour_2, alpha=0.75)
 	plt.xlabel('Relative difference between peak SNR - %')
-	plt.ylabel('Number of peaks - Second harmonic')
+	plt.ylabel('Second harmonic\nNumber of occurences')
 	#plt.title('BFLOAT vs SINGLE')
 	plt.xlim(xlo_g, xhi_g)
 	plt.ylim(ylo_g, yhi_g)

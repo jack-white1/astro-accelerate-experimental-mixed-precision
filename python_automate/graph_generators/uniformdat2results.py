@@ -5,7 +5,7 @@ import csv
 import analysis_funcs
 
 if __name__ == "__main__":
-	directory = "/home/jack/hdd/uniform/"
+	directory = "/home/jack/hdd/arc/dat/dat/"
 	datFileList = os.listdir(directory)
 	for filename in datFileList:
 		#print(filename)
@@ -54,12 +54,11 @@ if __name__ == "__main__":
 		
 			for band in range(nBands):
 				#print("Harmonic band "+str(band)+" from "+ str(bandBoundaries[band][0]) +" Hz to "+ str(bandBoundaries[band][1]) +" Hz")
-				candidate_peak = [0,0,0]
+				candidate_peak = [0.0,0.5*(bandBoundaries[band][0] + bandBoundaries[band][1]),0.0]
 				for peak in peaks:
 					if ((peak[1] > bandBoundaries[band][0]) and (peak[1] < bandBoundaries[band][1]) and peak[2] > candidate_peak[2]):
 						candidate_peak = peak
-				if candidate_peak != [0,0,0]:
-					harmonics.append(candidate_peak)
+				harmonics.append(candidate_peak)
 
 			#print("Harmonics:")
 			i = 0

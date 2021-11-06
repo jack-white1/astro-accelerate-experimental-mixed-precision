@@ -1,6 +1,16 @@
 import json
 import math
 import datetime
+import os
+import fnmatch
+
+def find(pattern, path):
+	result = []
+	for root, dirs, files in os.walk(path):
+		for name in files:
+			if fnmatch.fnmatch(name, pattern):
+				result.append(os.path.join(root, name))
+	return result
 
 def relative_difference (a,b):
 	try:
@@ -19,7 +29,8 @@ def group_results(resultsFilePath, nPeaks, dateSince = datetime.datetime(2001,1,
 	for i in rawResultsList:
 		peak_list = i["peak_list"]
 		precision = i["precision"]
-		parameters = {"period": i["period"],\
+		parameters = {"seed": i["seed"],\
+		"period": i["period"],\
 		"width": i["width"],\
 		"snrpeak": i["snrpeak"],\
 		"dm": i["dm"],\
@@ -64,7 +75,7 @@ def group_results(resultsFilePath, nPeaks, dateSince = datetime.datetime(2001,1,
 						result_group["PRESTOsigma_peaks"] = json.loads(candidate["peak_list"])[0:nPeaks]
 			results.remove(result)
 			grouped_results.append(result_group)
-	print("Returning grouped_results: " + str(grouped_results))
+	#print("Returning grouped_results: " + str(grouped_results))
 	return grouped_results
 
 def extract_diff_hist_save_params(grouped_results, harmonic, index):
@@ -74,27 +85,25 @@ def extract_diff_hist_save_params(grouped_results, harmonic, index):
 	b2d_hist = []
 
 	for group in grouped_results:
-		print("group: " + str(group))
+		#print("group: " + str(group))
 		if datetime.datetime.strptime(group["date"], '%d-%m-%Y-%H-%M-%S.%f') > datetime.datetime(2021,8,20):
 			try:
 				bfloat_peak = group["bfloat_peaks"][harmonic][index]
 				single_peak = group["single_peaks"][harmonic][index]
 				double_peak = group["double_peaks"][harmonic][index]
 
+				if (index != 2) or ((index == 2) and (bfloat_peak != 0.0) and (single_peak != 0.0) and (double_peak != 0.0)):
+					b2s_diff = relative_difference(bfloat_peak,single_peak)
+					s2d_diff = relative_difference(single_peak,double_peak)
+					b2d_diff = relative_difference(bfloat_peak,double_peak)
 
-				b2s_diff = relative_difference(bfloat_peak,single_peak)
-				s2d_diff = relative_difference(single_peak,double_peak)
-				b2d_diff = relative_difference(bfloat_peak,double_peak)
-
-			#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
-
-				b2s_hist.append([b2s_diff,group["parameters"]])
-				s2d_hist.append([s2d_diff,group["parameters"]])
-				b2d_hist.append([b2d_diff,group["parameters"]])
+					b2s_hist.append({'diff': b2s_diff,'parameters': group["parameters"], "bfloat_peak" : bfloat_peak, "single_peak" : single_peak, "double_peak" : double_peak})
+					s2d_hist.append({'diff': s2d_diff,'parameters': group["parameters"], "bfloat_peak" : bfloat_peak, "single_peak" : single_peak, "double_peak" : double_peak})
+					b2d_hist.append({'diff': b2d_diff,'parameters': group["parameters"], "bfloat_peak" : bfloat_peak, "single_peak" : single_peak, "double_peak" : double_peak})
 			except:
 				print("nothing to add to histogram, dump group:")
-				print(group)
-				print("\n\n\n")
+				#print(group)
+				#print("\n\n\n")
 
 	return b2s_hist, s2d_hist, b2d_hist
 
@@ -110,16 +119,16 @@ def extract_diff_hist(grouped_results, harmonic, index):
 			single_peak = group["single_peaks"][harmonic][index]
 			double_peak = group["double_peaks"][harmonic][index]
 
+			if (index != 2) or ((index == 2) and (bfloat_peak != 0.0) and (single_peak != 0.0) and (double_peak != 0.0)):
+				b2s_diff = relative_difference(bfloat_peak,single_peak)
+				s2d_diff = relative_difference(single_peak,double_peak)
+				b2d_diff = relative_difference(bfloat_peak,double_peak)
 
-			b2s_diff = relative_difference(bfloat_peak,single_peak)
-			s2d_diff = relative_difference(single_peak,double_peak)
-			b2d_diff = relative_difference(bfloat_peak,double_peak)
+				#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
 
-			#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
-
-			b2s_hist.append(b2s_diff)
-			s2d_hist.append(s2d_diff)
-			b2d_hist.append(b2d_diff)
+				b2s_hist.append(b2s_diff)
+				s2d_hist.append(s2d_diff)
+				b2d_hist.append(b2d_diff)
 		except:
 			#pass
 			print("nothing to add to histogram, dump group:")
@@ -140,16 +149,134 @@ def extract_diff_hist_freq_bin(grouped_results, harmonic, index):
 			single_peak = group["single_peaks"][harmonic][index]
 			double_peak = group["double_peaks"][harmonic][index]
 
+			if (index != 2) or ((index == 2) and (bfloat_peak != 0.0) and (single_peak != 0.0) and (double_peak != 0.0)):
+				b2s_diff = bfloat_peak-single_peak
+				s2d_diff = single_peak-double_peak
+				b2d_diff = bfloat_peak-double_peak
 
-			b2s_diff = bfloat_peak-single_peak
-			s2d_diff = single_peak-double_peak
-			b2d_diff = bfloat_peak-double_peak
+				#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
 
-			#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
+				b2s_hist.append(b2s_diff)
+				s2d_hist.append(s2d_diff)
+				b2d_hist.append(b2d_diff)
+		except:
+			#pass
+			print("nothing to add to histogram, dump group:")
+			print(group)
+			print("\n\n\n")
 
-			b2s_hist.append(b2s_diff)
-			s2d_hist.append(s2d_diff)
-			b2d_hist.append(b2d_diff)
+	return b2s_hist, s2d_hist, b2d_hist
+
+def extract_diff_hist_freq_bin_3d(grouped_results, harmonic, index):
+
+	b2s_hist = [[],[],[]]
+	s2d_hist = [[],[],[]]
+	b2d_hist = [[],[],[]]
+
+	for group in grouped_results:
+		try:
+			bfloat_peak = group["bfloat_peaks"][harmonic][index]
+			single_peak = group["single_peaks"][harmonic][index]
+			double_peak = group["double_peaks"][harmonic][index]
+
+			if (index != 2) or ((index == 2) and (bfloat_peak != 0.0) and (single_peak != 0.0) and (double_peak != 0.0)):
+				b2s_diff = bfloat_peak-single_peak
+				s2d_diff = single_peak-double_peak
+				b2d_diff = bfloat_peak-double_peak
+				#if (b2s_diff != 0.0) and (s2d_peak != 0.0) and (b2d_peak != 0.0):
+				if (b2s_diff != 0.0):
+				#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
+
+					b2s_hist[0].append(b2s_diff)
+					s2d_hist[0].append(s2d_diff)
+					b2d_hist[0].append(b2d_diff)
+
+					b2s_hist[1].append(group["bfloat_peaks"][harmonic][2])
+					s2d_hist[1].append(group["single_peaks"][harmonic][2])
+					b2d_hist[1].append(group["double_peaks"][harmonic][2])
+
+					b2s_hist[2].append(group['parameters']['period'])
+					s2d_hist[2].append(group['parameters']['period'])
+					b2d_hist[2].append(group['parameters']['period'])
+		except:
+			#pass
+			print("nothing to add to histogram, dump group:")
+			print(group)
+			print("\n\n\n")
+
+	return b2s_hist, s2d_hist, b2d_hist
+
+def extract_zero_diff_hist_freq_bin_3d(grouped_results, harmonic, index):
+
+	b2s_hist = [[],[],[]]
+	s2d_hist = [[],[],[]]
+	b2d_hist = [[],[],[]]
+
+	for group in grouped_results:
+		try:
+			bfloat_peak = group["bfloat_peaks"][harmonic][index]
+			single_peak = group["single_peaks"][harmonic][index]
+			double_peak = group["double_peaks"][harmonic][index]
+
+			if (index != 2) or ((index == 2) and (bfloat_peak != 0.0) and (single_peak != 0.0) and (double_peak != 0.0)):
+				b2s_diff = bfloat_peak-single_peak
+				s2d_diff = single_peak-double_peak
+				b2d_diff = bfloat_peak-double_peak
+				#if (b2s_diff != 0.0) and (s2d_peak != 0.0) and (b2d_peak != 0.0):
+				if (b2s_diff == 0.0):
+				#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
+
+					b2s_hist[0].append(b2s_diff)
+					s2d_hist[0].append(s2d_diff)
+					b2d_hist[0].append(b2d_diff)
+
+					b2s_hist[1].append(group["bfloat_peaks"][harmonic][2])
+					s2d_hist[1].append(group["single_peaks"][harmonic][2])
+					b2d_hist[1].append(group["double_peaks"][harmonic][2])
+
+					b2s_hist[2].append(group["parameters"])
+					s2d_hist[2].append(group["parameters"])
+					b2d_hist[2].append(group["parameters"])
+
+		except:
+			#pass
+			print("nothing to add to histogram, dump group:")
+			print(group)
+			print("\n\n\n")
+
+	return b2s_hist, s2d_hist, b2d_hist
+
+def extract_thresh_diff_hist_freq_bin_3d(grouped_results, harmonic, index,thresh = 2):
+
+	b2s_hist = [[],[]]
+	s2d_hist = [[],[]]
+	b2d_hist = [[],[]]
+
+	for group in grouped_results:
+		try:
+			bfloat_peak = group["bfloat_peaks"][harmonic][index]
+			single_peak = group["single_peaks"][harmonic][index]
+			double_peak = group["double_peaks"][harmonic][index]
+
+			if (index != 2) or ((index == 2) and (bfloat_peak != 0.0) and (single_peak != 0.0) and (double_peak != 0.0)):
+				b2s_diff = bfloat_peak-single_peak
+				s2d_diff = single_peak-double_peak
+				b2d_diff = bfloat_peak-double_peak
+				#if (b2s_diff != 0.0) and (s2d_peak != 0.0) and (b2d_peak != 0.0):
+				if (b2s_diff > 2):
+				#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
+
+					b2s_hist[0].append(b2s_diff)
+					s2d_hist[0].append(s2d_diff)
+					b2d_hist[0].append(b2d_diff)
+
+					group["parameters"]["snrpeak"] = 0.0
+					group["parameters"]["seed"] = int(group["parameters"]["seed"])
+
+					b2s_hist[1].append(group["parameters"])
+					s2d_hist[1].append(group["parameters"])
+					b2d_hist[1].append(group["parameters"])
+
 		except:
 			#pass
 			print("nothing to add to histogram, dump group:")
@@ -190,17 +317,17 @@ def extract_bounded_diff_hist(grouped_results, harmonic, index, lb, ub):
 			single_peak = group["single_peaks"][harmonic][index]
 			double_peak = group["double_peaks"][harmonic][index]
 
+			if (index != 2) or ((index == 2) and (bfloat_peak != 0.0) and (single_peak != 0.0) and (double_peak != 0.0)):
+				b2s_diff = relative_difference(bfloat_peak,single_peak)
+				s2d_diff = relative_difference(single_peak,double_peak)
+				b2d_diff = relative_difference(bfloat_peak,double_peak)
 
-			b2s_diff = relative_difference(bfloat_peak,single_peak)
-			s2d_diff = relative_difference(single_peak,double_peak)
-			b2d_diff = relative_difference(bfloat_peak,double_peak)
-
-			#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
-			#print("Single peak: " + str(single_peak))
-			if (single_peak > lb) and (single_peak < ub):
-				b2s_hist.append(b2s_diff)
-				s2d_hist.append(s2d_diff)
-				b2d_hist.append(b2d_diff)
+				#print(str(b2s_diff) +"\t"+ str(s2d_diff) +"\t"+ str(b2d_diff))
+				#print("Single peak: " + str(single_peak))
+				if (single_peak > lb) and (single_peak < ub):
+					b2s_hist.append(b2s_diff)
+					s2d_hist.append(s2d_diff)
+					b2d_hist.append(b2d_diff)
 		except:
 			print("nothing to add to histogram, dump group:")
 			print(group)
@@ -227,6 +354,7 @@ def roundup(number, nearest):
 def params_from_filename(filename, extract_date=True):
 	#print("extracing params from " + filename)
 	params = {}
+	filename = filename.split("/")[-1]
 	params_list = filename.split('_')
 	i = 0
 	for i in range(0, len(params_list), 2):
@@ -239,7 +367,7 @@ def params_from_filename(filename, extract_date=True):
 			try:
 				date = datetime.datetime.strptime(params_list[i], '%d-%m-%Y-%H-%M-%S.%f')
 				params["date"] = params_list[i]
-				print(date)
+				#print(date)
 			except:
 				#print("params_list: " + str(params_list) + " params_list[i]:" +params_list[i] + " is not datetime")
 				pass
